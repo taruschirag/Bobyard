@@ -11,11 +11,3 @@ Single-page React UI that consumes the Django comments API for list/add/edit/del
 ## Backend
 
 - Look at backend/README.md
-
-## Features
-
-- Lists comments (text, author, date, likes, image).
-- Add comment (posted as Admin with current time via backend).
-- Edit existing comment text/image.
-- Delete comments.
-- Clean responsive styling with action states and inline validation.
