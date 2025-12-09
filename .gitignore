@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+env.bak/
+venv.bak/
+*.sqlite3
+
+# Django
+db.sqlite3
+*.log
+
+# macOS
+.DS_Store
+
+# Node/build (if added later)
+node_modules/
+dist/
+build/
+
+# Coverage / pytest
+.coverage
+.pytest_cache/
+
+# Byte-compiled / cache
+*.pyc
+
+# VSCode
+.vscode/

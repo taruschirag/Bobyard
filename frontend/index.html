@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Comments Admin</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0e172a;
+        --panel: #131c31;
+        --muted: #8aa0bf;
+        --text: #f3f5fb;
+        --accent: #5dd5c4;
+        --accent-strong: #2ee2b8;
+        --danger: #ff6b6b;
+        --shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Space Grotesk", "Segoe UI", system-ui, -apple-system, sans-serif;
+        background: radial-gradient(circle at 10% 20%, rgba(93, 213, 196, 0.06), transparent 25%),
+          radial-gradient(circle at 90% 20%, rgba(93, 213, 196, 0.08), transparent 25%),
+          radial-gradient(circle at 50% 120%, rgba(255, 107, 107, 0.08), transparent 30%),
+          var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+      }
+
+      .page {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 32px 16px 64px;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .title {
+        font-size: 28px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        background: rgba(93, 213, 196, 0.12);
+        color: var(--accent-strong);
+        border-radius: 999px;
+        font-weight: 600;
+        border: 1px solid rgba(93, 213, 196, 0.3);
+      }
+
+      .grid {
+        display: grid;
+        gap: 16px;
+      }
+
+      .card {
+        background: var(--panel);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 18px;
+        box-shadow: var(--shadow);
+      }
+
+      .card__header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: linear-gradient(145deg, rgba(93, 213, 196, 0.25), rgba(19, 28, 49, 0.8));
+        object-fit: cover;
+        border: 1px solid rgba(93, 213, 196, 0.4);
+      }
+
+      .card__meta {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .card__author {
+        font-weight: 600;
+        font-size: 16px;
+      }
+
+      .card__date {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .card__text {
+        line-height: 1.5;
+        margin-bottom: 10px;
+        color: #dde5ff;
+      }
+
+      .card__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .likes {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(93, 213, 196, 0.12);
+        color: var(--accent-strong);
+        font-weight: 600;
+        font-size: 13px;
+      }
+
+      .actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      button,
+      .ghost-button {
+        cursor: pointer;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        padding: 10px 14px;
+        transition: transform 120ms ease, box-shadow 150ms ease, opacity 120ms ease;
+        font-family: inherit;
+      }
+
+      button:hover,
+      .ghost-button:hover {
+        transform: translateY(-1px);
+      }
+
+      .btn {
+        background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+        color: #0a0f1f;
+        box-shadow: 0 12px 30px rgba(46, 226, 184, 0.35);
+      }
+
+      .btn-ghost {
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--text);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .btn-danger {
+        background: linear-gradient(135deg, #ff8a8a, var(--danger));
+        color: #0a0f1f;
+        box-shadow: 0 12px 30px rgba(255, 107, 107, 0.35);
+      }
+
+      .form {
+        background: rgba(19, 28, 49, 0.9);
+        border: 1px dashed rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 16px;
+        margin-bottom: 22px;
+      }
+
+      .form h3 {
+        margin: 0 0 10px;
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 12px;
+      }
+
+      label {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        background: #0c1424;
+        color: var(--text);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 10px 12px;
+        font-family: inherit;
+        font-size: 14px;
+        transition: border-color 120ms ease, box-shadow 120ms ease;
+      }
+
+      input:focus,
+      textarea:focus {
+        outline: none;
+        border-color: var(--accent-strong);
+        box-shadow: 0 0 0 3px rgba(46, 226, 184, 0.18);
+      }
+
+      textarea {
+        min-height: 80px;
+        resize: vertical;
+      }
+
+      .muted {
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .inline {
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .status {
+        margin: 8px 0;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.06);
+        font-size: 13px;
+      }
+
+      .status.error {
+        background: rgba(255, 107, 107, 0.12);
+        color: #ffc6c6;
+        border: 1px solid rgba(255, 107, 107, 0.3);
+      }
+
+      .status.success {
+        background: rgba(93, 213, 196, 0.12);
+        color: var(--accent-strong);
+        border: 1px solid rgba(93, 213, 196, 0.3);
+      }
+
+      .empty {
+        text-align: center;
+        padding: 40px 18px;
+        border: 1px dashed rgba(255, 255, 255, 0.2);
+        border-radius: 16px;
+        background: rgba(19, 28, 49, 0.7);
+      }
+
+      @media (max-width: 640px) {
+        header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .card__footer {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .actions {
+          width: 100%;
+          justify-content: flex-start;
+          flex-wrap: wrap;
+        }
+        button,
+        .ghost-button {
+          width: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script type="text/babel">
+      const API_BASE = 'http://127.0.0.1:8000/api/comments/';
+
+      const formatDate = (iso) => {
+        if (!iso) return 'Unknown date';
+        const d = new Date(iso);
+        return d.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+      };
+
+      const PlaceholderAvatar = () => (
+        <div className="avatar" style={{ display: 'grid', placeItems: 'center', color: '#6b7da5' }}>
+          <span>👤</span>
+        </div>
+      );
+
+      function CommentCard({
+        comment,
+        isEditing,
+        onEditStart,
+        onEditCancel,
+        onSave,
+        onDelete,
+        editingText,
+        setEditingText,
+        editingImage,
+        setEditingImage,
+        busy,
+      }) {
+        return (
+          <div className="card">
+            <div className="card__header">
+              {comment.image ? (
+                <img className="avatar" src={comment.image} alt={comment.author} />
+              ) : (
+                <PlaceholderAvatar />
+              )}
+              <div className="card__meta">
+                <div className="card__author">{comment.author}</div>
+                <div className="card__date">{formatDate(comment.date)}</div>
+              </div>
+            </div>
+
+            {isEditing ? (
+              <div className="field">
+                <label>Edit text</label>
+                <textarea value={editingText} onChange={(e) => setEditingText(e.target.value)} />
+                <label>Image URL (optional)</label>
+                <input value={editingImage} onChange={(e) => setEditingImage(e.target.value)} />
+              </div>
+            ) : (
+              <div className="card__text">{comment.text}</div>
+            )}
+
+            <div className="card__footer">
+              <div className="likes">❤️ {comment.likes}</div>
+              <div className="actions">
+                {isEditing ? (
+                  <React.Fragment>
+                    <button
+                      className="btn"
+                      disabled={busy}
+                      onClick={() => onSave(comment.id, editingText, editingImage)}
+                    >
+                      {busy ? 'Saving...' : 'Save'}
+                    </button>
+                    <button className="btn-ghost" onClick={onEditCancel} disabled={busy}>
+                      Cancel
+                    </button>
+                  </React.Fragment>
+                ) : (
+                  <React.Fragment>
+                    <button className="btn-ghost" onClick={() => onEditStart(comment)} disabled={busy}>
+                      Edit
+                    </button>
+                    <button className="btn-danger" onClick={() => onDelete(comment.id)} disabled={busy}>
+                      {busy ? 'Deleting...' : 'Delete'}
+                    </button>
+                  </React.Fragment>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      function App() {
+        const [comments, setComments] = React.useState([]);
+        const [loading, setLoading] = React.useState(true);
+        const [error, setError] = React.useState('');
+        const [message, setMessage] = React.useState('');
+        const [newText, setNewText] = React.useState('');
+        const [newImage, setNewImage] = React.useState('');
+        const [editingId, setEditingId] = React.useState(null);
+        const [editingText, setEditingText] = React.useState('');
+        const [editingImage, setEditingImage] = React.useState('');
+        const [busyId, setBusyId] = React.useState(null);
+
+        const loadComments = React.useCallback(async () => {
+          setLoading(true);
+          setError('');
+          try {
+            const res = await fetch(API_BASE);
+            if (!res.ok) {
+              throw new Error('Failed to fetch comments');
+            }
+            const data = await res.json();
+            setComments(data);
+          } catch (err) {
+            setError(err.message);
+          } finally {
+            setLoading(false);
+          }
+        }, []);
+
+        React.useEffect(() => {
+          loadComments();
+        }, [loadComments]);
+
+        const handleAdd = async (e) => {
+          e.preventDefault();
+          if (!newText.trim()) {
+            setError('Please enter some text before submitting.');
+            return;
+          }
+          setError('');
+          setMessage('');
+          setBusyId('new');
+          try {
+            const res = await fetch(API_BASE, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ text: newText.trim(), image: newImage.trim() }),
+            });
+            if (!res.ok) {
+              throw new Error('Failed to add comment');
+            }
+            setNewText('');
+            setNewImage('');
+            setMessage('Comment added as Admin.');
+            await loadComments();
+          } catch (err) {
+            setError(err.message);
+          } finally {
+            setBusyId(null);
+          }
+        };
+
+        const startEdit = (comment) => {
+          setEditingId(comment.id);
+          setEditingText(comment.text);
+          setEditingImage(comment.image || '');
+          setMessage('');
+          setError('');
+        };
+
+        const cancelEdit = () => {
+          setEditingId(null);
+          setEditingText('');
+          setEditingImage('');
+        };
+
+        const saveEdit = async (id, text, image) => {
+          if (!text.trim()) {
+            setError('Comment text cannot be empty.');
+            return;
+          }
+          setBusyId(id);
+          setError('');
+          setMessage('');
+          try {
+            const res = await fetch(API_BASE + id + '/', {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ text: text.trim(), image: image.trim() }),
+            });
+            if (!res.ok) {
+              throw new Error('Failed to update comment');
+            }
+            setMessage('Comment updated.');
+            setEditingId(null);
+            await loadComments();
+          } catch (err) {
+            setError(err.message);
+          } finally {
+            setBusyId(null);
+          }
+        };
+
+        const deleteComment = async (id) => {
+          const confirmed = window.confirm('Delete this comment?');
+          if (!confirmed) return;
+          setBusyId(id);
+          setError('');
+          setMessage('');
+          try {
+            const res = await fetch(API_BASE + id + '/', { method: 'DELETE' });
+            if (!res.ok) {
+              throw new Error('Failed to delete comment');
+            }
+            setMessage('Comment deleted.');
+            setEditingId((current) => (current === id ? null : current));
+            await loadComments();
+          } catch (err) {
+            setError(err.message);
+          } finally {
+            setBusyId(null);
+          }
+        };
+
+        return (
+          <div className="page">
+            <header>
+              <div className="title">Comments Admin</div>
+              <div className="pill">
+                <span>Live</span>
+                <span style={{ fontSize: 10 }}>●</span>
+              </div>
+            </header>
+
+            <form className="form" onSubmit={handleAdd}>
+              <h3>Add a comment</h3>
+              <div className="field">
+                <label>Text</label>
+                <textarea
+                  placeholder="Share a thought..."
+                  value={newText}
+                  onChange={(e) => setNewText(e.target.value)}
+                />
+              </div>
+              <div className="field">
+                <label>Image URL (optional)</label>
+                <input
+                  placeholder="https://example.com/avatar.png"
+                  value={newImage}
+                  onChange={(e) => setNewImage(e.target.value)}
+                />
+              </div>
+              <div className="actions" style={{ justifyContent: 'space-between' }}>
+                <div className="muted">Created as Admin with current time.</div>
+                <button className="btn" type="submit" disabled={busyId === 'new'}>
+                  {busyId === 'new' ? 'Submitting...' : 'Post comment'}
+                </button>
+              </div>
+            </form>
+
+            {error && <div className="status error">⚠️ {error}</div>}
+            {message && <div className="status success">✅ {message}</div>}
+
+            {loading ? (
+              <div className="status">Loading comments…</div>
+            ) : comments.length === 0 ? (
+              <div className="empty">
+                <div style={{ fontSize: 24 }}>No comments yet</div>
+                <div className="muted">Add the first one as Admin above.</div>
+              </div>
+            ) : (
+              <div className="grid">
+                {comments.map((comment) => (
+                  <CommentCard
+                    key={comment.id}
+                    comment={comment}
+                    isEditing={editingId === comment.id}
+                    editingText={editingText}
+                    setEditingText={setEditingText}
+                    editingImage={editingImage}
+                    setEditingImage={setEditingImage}
+                    onEditStart={startEdit}
+                    onEditCancel={cancelEdit}
+                    onSave={saveEdit}
+                    onDelete={deleteComment}
+                    busy={busyId === comment.id}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+  </body>
+</html>
